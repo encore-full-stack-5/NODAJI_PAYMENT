@@ -14,7 +14,7 @@ import lombok.*;
 public class Account {
     @Id
     @Column(name = "USER_ID")
-    private String user_id;
+    private String userId;
     @Column(name = "POINT")
     private Long point;
 }
