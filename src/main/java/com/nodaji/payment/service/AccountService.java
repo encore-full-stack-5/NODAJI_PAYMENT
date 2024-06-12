@@ -10,5 +10,7 @@ public interface AccountService {
 
     Long getPoint(String userId);
 
-    void depositPoint(DepositRequestDto req);
+    void depositPoint(String userId, DepositRequestDto req);
+
+    void withdrawPoint(String userId, DepositRequestDto req);
 }
