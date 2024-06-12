@@ -5,6 +5,7 @@ import com.nodaji.payment.global.domain.dto.AccountDto;
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.exception.AccountExistException;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
+import com.nodaji.payment.global.domain.exception.BalanceNotZeroException;
 import com.nodaji.payment.global.domain.exception.UserNotFoundException;
 import com.nodaji.payment.global.domain.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,9 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void deleteAccount(String userId) {
-        if(accountRepository.existsById(userId)) accountRepository.deleteById(userId);
-        else throw new AccountNotFoundException();
+        Account account = accountRepository.findById(userId).orElseThrow(AccountNotFoundException::new);
+        if(account.getPoint()>0) throw new BalanceNotZeroException();
+        else accountRepository.deleteById(userId);
     }
 
     /**
