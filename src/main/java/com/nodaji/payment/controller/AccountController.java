@@ -1,5 +1,6 @@
 package com.nodaji.payment.controller;
 
+import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.global.domain.dto.AccountDto;
 import com.nodaji.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -39,10 +40,10 @@ public class AccountController {
      * 예치금 충전 (타 결제 시스템과 연동)
      */
     @PostMapping("/{userId}/deposit")
-    public void depositToAccount(@PathVariable("userId") String userId){
-
+    public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody DepositRequestDto req){
+        accountService.depositPoint(req);
     }
-
+//
     /**
      * 예치금 출금 (다른 은행 시스템과 연동)
      */
