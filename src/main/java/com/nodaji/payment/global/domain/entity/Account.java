@@ -16,5 +16,13 @@ public class Account {
     @Column(name = "USER_ID")
     private String userId;
     @Column(name = "POINT")
+    @Setter
     private Long point;
+
+    public Account toEntity(String userId,Long point){
+        return Account.builder()
+                .userId(userId)
+                .point(point)
+                .build();
+    }
 }
