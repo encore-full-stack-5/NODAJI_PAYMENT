@@ -1,6 +1,7 @@
 package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.request.DepositRequestDto;
+import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.dto.AccountDto;
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.exception.AccountExistException;
@@ -44,8 +45,11 @@ public class AccountServiceImpl implements AccountService {
      * 예치금 조회
      */
     @Override
-    public Long getPoint(String userId) {
-        if(accountRepository.existsById(userId)) return accountRepository.findPointByUserId(userId);
+    public PointResponseDto getPoint(String userId) {
+        if(accountRepository.existsById(userId)) {
+            Account byUserId = accountRepository.findByUserId(userId);
+            return PointResponseDto.from(byUserId);
+        }
         else throw new AccountNotFoundException();
     }
 

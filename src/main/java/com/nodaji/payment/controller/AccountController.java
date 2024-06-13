@@ -1,6 +1,7 @@
 package com.nodaji.payment.controller;
 
 import com.nodaji.payment.dto.request.DepositRequestDto;
+import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.dto.AccountDto;
 import com.nodaji.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class AccountController {
      */
     @GetMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public Long getPoint(@PathVariable("userId") String userId){
+    public PointResponseDto getPoint(@PathVariable("userId") String userId){
         return accountService.getPoint(userId);
     }
 
