@@ -2,6 +2,7 @@ package com.nodaji.payment.service;
 
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.exception.AccountExistException;
+import com.nodaji.payment.global.domain.exception.BalanceNotZeroException;
 import com.nodaji.payment.global.domain.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,28 +29,40 @@ class AccountServiceImplTest {
     @DisplayName("계좌 생성 테스트")
     @Transactional
     void createAccount() {
-        Account account = new Account("userId",0L);
-        accountRepository.save(account);
+        accountService.createAccount("userId");
         Account byUserId = accountRepository.findByUserId("userId");
-        assertEquals(0L, byUserId.getPoint());
         assertEquals("userId", byUserId.getUserId());
+        assertEquals(0L, byUserId.getPoint());
     }
 
     @Test
     @DisplayName("계좌 중복 생성 예외 테스트")
     @Transactional
     void createExistAccount() {
-        Account account = new Account("userId",0L);
-        accountRepository.save(account);
+        accountService.createAccount("userId");
         AccountExistException existException = assertThrows(AccountExistException.class,()->accountService.createAccount("userId"));
         assertEquals("해당 계좌가 이미 존재합니다.",existException.getMessage());
     }
 
-
-
+    @Test
+    @DisplayName("계좌 삭제 테스트")
+    @Transactional
+    void deleteAccount() {
+        Account account = new Account("userId",0L);
+        accountRepository.save(account);
+        accountService.deleteAccount("userId");
+        boolean existsById = accountRepository.existsById("userId");
+        assertEquals(false,existsById);
+    }
 
     @Test
-    void deleteAccount() {
+    @DisplayName("계좌 삭제시 예치금이 0원보다 클 때 예외 테스트")
+    @Transactional
+    void deleteAccountMoreThanZeroException() {
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        BalanceNotZeroException NotZeroException = assertThrows(BalanceNotZeroException.class,()->accountService.deleteAccount("userId"));
+        assertEquals("예치금 잔액이 남아있습니다.",NotZeroException.getMessage());
     }
 
     @Test
