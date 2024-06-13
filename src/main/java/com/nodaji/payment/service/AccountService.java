@@ -14,4 +14,6 @@ public interface AccountService {
     void depositPoint(String userId, DepositRequestDto req);
 
     void withdrawPoint(String userId, DepositRequestDto req);
+
+    void getTransactionHistory(String userId);
 }
