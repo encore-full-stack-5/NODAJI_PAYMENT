@@ -74,4 +74,9 @@ public class AccountServiceImpl implements AccountService {
         account.setPoint(account.getPoint()-req.price());
         accountRepository.save(account);
     }
+
+    @Override
+    public void getTransactionHistory(String userId) {
+        // 거래내역을 가져오는 메소드
+    }
 }

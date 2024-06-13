@@ -65,7 +65,7 @@ public class AccountController {
     @GetMapping("/{userId}/history")
     @ResponseStatus(HttpStatus.OK)
     public void getTransactionHistory(@PathVariable("userId") String userId){
-
+        accountService.getTransactionHistory(userId);
     }
 
     /**
