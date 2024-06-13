@@ -24,5 +24,6 @@ public class Account {
                 .userId(userId)
                 .point(point)
                 .build();
+
     }
 }
