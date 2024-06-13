@@ -1,7 +1,9 @@
 package com.nodaji.payment.service;
 
+import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.exception.AccountExistException;
+import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
 import com.nodaji.payment.global.domain.exception.BalanceNotZeroException;
 import com.nodaji.payment.global.domain.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +68,21 @@ class AccountServiceImplTest {
     }
 
     @Test
+    @DisplayName("포인트 조회 테스트")
+    @Transactional
     void getPoint() {
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        PointResponseDto userId = accountService.getPoint("userId");
+        assertEquals(10000L,userId.point());
+    }
+
+    @Test
+    @DisplayName("포인트 조회 예외 테스트(해당 계좌가 존재하지 않을 때)")
+    @Transactional
+    void getPointNotExistAccountException() {
+        AccountNotFoundException accountNotFoundException = assertThrows(AccountNotFoundException.class,()->accountService.getPoint("userId"));
+        assertEquals("해당 계좌가 없습니다.",accountNotFoundException.getMessage());
     }
 
     @Test
