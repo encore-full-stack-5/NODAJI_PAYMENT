@@ -47,6 +47,7 @@ public class AccountController {
     @PostMapping("/{userId}/deposit")
     @ResponseStatus(HttpStatus.OK)
     public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody DepositRequestDto req){
+
         accountService.depositPoint(userId, req);
     }
 //
