@@ -2,7 +2,7 @@ package com.nodaji.payment.controller;
 
 import com.nodaji.payment.dto.response.PaymentErrorResponseDto;
 import com.nodaji.payment.dto.response.PaymentSuccessResponseDto;
-import com.nodaji.payment.service.PaymentHistoryService;
+import com.nodaji.payment.service.PaymentHistoryServiceImpl;
 import com.nodaji.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONObject;
@@ -16,10 +16,10 @@ import java.util.Map;
 public class PaymentController {
 
     private final PaymentService paymentService;
-    private final PaymentHistoryService paymentInfoService;
+    private final PaymentHistoryServiceImpl paymentInfoService;
 
     @GetMapping("/success/{userId}")
-    public Object paymentCont(
+    public Object submitPayment(
             @PathVariable(name = "userId") String userId,
             @RequestParam(name = "orderId") String orderId,
             @RequestParam(name = "amount") Integer amount,
