@@ -1,5 +1,6 @@
 package com.nodaji.payment.service;
 
+import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -23,12 +24,15 @@ import java.util.Map;
 @Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
-    private final PaymentHistoryServiceImpl paymentHistoryService;
+    private final AccountService accountService;
 
     @Value("${paymentSecretKey}")
     private String paymentSecretKey;
 
-    public Map<String, Object> processPayment(String userId, String orderId, Integer amount, String paymentKey) throws Exception {
+    public Map<String, Object> processPayment(String userId, String orderId, Long amount, String paymentKey) throws Exception {
+
+        if(!accountService.isExistAccount(userId)) throw new AccountNotFoundException();
+
         String secretKey = paymentSecretKey + ":";
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode(secretKey.getBytes("UTF-8"));
@@ -56,9 +60,6 @@ public class PaymentServiceImpl implements PaymentService {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
-
-        log.info("Response Code: {}", code);
-        log.info("Response JSON: {}", jsonObject.toJSONString());
 
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("isSuccess", isSuccess);

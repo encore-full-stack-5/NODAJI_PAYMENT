@@ -2,7 +2,6 @@ package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
-import com.nodaji.payment.global.domain.dto.AccountDto;
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.exception.AccountExistException;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
@@ -13,12 +12,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
     private final AccountRepository accountRepository;
+
+    /**
+     * 계좌 존재 유무 확인
+     */
+    public Boolean isExistAccount(String userId){
+        return accountRepository.existsById(userId);
+    }
 
     /**
      * 계좌 생성
@@ -58,10 +63,10 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     @Transactional
-    public void depositPoint(String userId, DepositRequestDto req) {
+    public void depositPoint(String userId, Long amount) {
         Account account = accountRepository.findById(userId)
                 .orElseThrow(UserNotFoundException::new);
-        account.setPoint(account.getPoint()+req.price());
+        account.setPoint(account.getPoint()+amount);
         accountRepository.save(account);
     }
     /**
