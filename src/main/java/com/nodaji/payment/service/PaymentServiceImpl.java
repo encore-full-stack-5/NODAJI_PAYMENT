@@ -23,10 +23,12 @@ import java.util.Map;
 @Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
+    private final PaymentHistoryService paymentHistoryService;
+
     @Value("${custom.paymentSecretKey}")
     private String paymentSecretKey;
 
-    public Map<String, Object> processPayment(String orderId, Integer amount, String paymentKey) throws Exception {
+    public Map<String, Object> processPayment(String userId, String orderId, Integer amount, String paymentKey) throws Exception {
         String secretKey = paymentSecretKey + ":";
         Base64.Encoder encoder = Base64.getEncoder();
         byte[] encodedBytes = encoder.encode(secretKey.getBytes("UTF-8"));
@@ -50,11 +52,13 @@ public class PaymentServiceImpl implements PaymentService {
         boolean isSuccess = code == 200;
 
         InputStream responseStream = isSuccess ? connection.getInputStream() : connection.getErrorStream();
-        // 결제 성공 및 실패 비즈니스 로직 구현 필요
         Reader reader = new InputStreamReader(responseStream, StandardCharsets.UTF_8);
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
+        // 결제 성공 및 실패 비즈니스 로직 구현 필요
+
+        paymentHistoryService.createPaymentHistory(jsonObject,userId);
 
         log.info("Response Code: {}", code);
         log.info("Response JSON: {}", jsonObject.toJSONString());
