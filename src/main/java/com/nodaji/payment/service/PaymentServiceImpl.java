@@ -23,9 +23,9 @@ import java.util.Map;
 @Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
-    private final PaymentHistoryService paymentHistoryService;
+    private final PaymentHistoryServiceImpl paymentHistoryService;
 
-    @Value("${custom.paymentSecretKey}")
+    @Value("${paymentSecretKey}")
     private String paymentSecretKey;
 
     public Map<String, Object> processPayment(String userId, String orderId, Integer amount, String paymentKey) throws Exception {
@@ -56,9 +56,6 @@ public class PaymentServiceImpl implements PaymentService {
         JSONParser parser = new JSONParser();
         JSONObject jsonObject = (JSONObject) parser.parse(reader);
         responseStream.close();
-        // 결제 성공 및 실패 비즈니스 로직 구현 필요
-
-        paymentHistoryService.createPaymentHistory(jsonObject,userId);
 
         log.info("Response Code: {}", code);
         log.info("Response JSON: {}", jsonObject.toJSONString());
