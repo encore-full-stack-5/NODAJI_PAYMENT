@@ -2,7 +2,6 @@ package com.nodaji.payment.controller;
 
 import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
-import com.nodaji.payment.global.domain.dto.AccountDto;
 import com.nodaji.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -46,9 +45,9 @@ public class AccountController {
      */
     @PostMapping("/{userId}/deposit")
     @ResponseStatus(HttpStatus.OK)
-    public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody DepositRequestDto req){
+    public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody Long amount){
 
-        accountService.depositPoint(userId, req);
+        accountService.depositPoint(userId, amount);
     }
 //
     /**
