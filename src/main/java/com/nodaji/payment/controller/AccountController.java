@@ -1,6 +1,5 @@
 package com.nodaji.payment.controller;
 
-import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
@@ -13,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/api/v1")
 public class AccountController {
     private final AccountService accountService;
 
@@ -72,12 +71,5 @@ public class AccountController {
         return accountService.getTransactionHistory(userId);
     }
 
-    /**
-     * 결제 요청
-     */
-    @PostMapping("/account/{userId}/pay")
-    @ResponseStatus(HttpStatus.OK)
-    public void pay(@PathVariable("userId") String userId){
 
-    };
 }
