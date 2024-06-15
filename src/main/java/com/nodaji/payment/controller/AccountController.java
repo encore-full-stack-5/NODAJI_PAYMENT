@@ -1,6 +1,7 @@
 package com.nodaji.payment.controller;
 
 import com.nodaji.payment.dto.request.DepositRequestDto;
+import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +56,7 @@ public class AccountController {
      */
     @PostMapping("/{userId}/withdraw")
     @ResponseStatus(HttpStatus.OK)
-    public void withdrawFromAccount(@PathVariable("userId") String userId, @RequestBody DepositRequestDto req){
+    public void withdrawFromAccount(@PathVariable("userId") String userId, @RequestBody WithdrawRequestDto req){
         accountService.withdrawPoint(userId, req);
     }
 
