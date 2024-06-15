@@ -1,7 +1,7 @@
 package com.nodaji.payment.service;
 
-import java.util.Map;
+import com.nodaji.payment.dto.response.PaymentErrorResponseDto;
 
 public interface PaymentService {
-    Map<String, Object> processPayment(String userId, String orderId, Long amount, String paymentKey) throws Exception;
+    Object processPayment(String userId, String orderId, Long amount, String paymentKey) throws Exception;
 }
