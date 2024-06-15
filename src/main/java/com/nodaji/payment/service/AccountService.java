@@ -3,6 +3,9 @@ package com.nodaji.payment.service;
 import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
+import com.nodaji.payment.global.domain.entity.History;
+
+import java.util.List;
 
 public interface AccountService {
     void createAccount(String userId);
@@ -15,7 +18,7 @@ public interface AccountService {
 
     void withdrawPoint(String userId, WithdrawRequestDto req);
 
-    void getTransactionHistory(String userId);
+    List<History> getTransactionHistory(String userId);
     void createWithdrawHistory(String userId, WithdrawRequestDto req);
     void createDepositHistory(String userId, Long price);
     Boolean isExistAccount(String userId);

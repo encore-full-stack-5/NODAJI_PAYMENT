@@ -3,10 +3,13 @@ package com.nodaji.payment.controller;
 import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
+import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -65,8 +68,8 @@ public class AccountController {
      */
     @GetMapping("/{userId}/history")
     @ResponseStatus(HttpStatus.OK)
-    public void getTransactionHistory(@PathVariable("userId") String userId){
-        accountService.getTransactionHistory(userId);
+    public List<History> getTransactionHistory(@PathVariable("userId") String userId){
+        return accountService.getTransactionHistory(userId);
     }
 
     /**
