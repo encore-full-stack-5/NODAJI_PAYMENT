@@ -2,6 +2,7 @@ package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.response.PaymentErrorResponseDto;
 import com.nodaji.payment.dto.response.PaymentSuccessResponseDto;
+import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -44,8 +45,11 @@ public class PaymentServiceImpl implements PaymentService {
         if (isSuccess) {
 //            예치금 충전
             accountService.depositPoint(userId,amount);
+//            충전 내역 저장
+            accountService.createDepositHistory(userId,amount);
 //            결제 내역 저장
             paymentHistoryService.createPaymentHistory(jsonObject, userId);
+
             return PaymentSuccessResponseDto.fromJSONObject(jsonObject);
         } else {
             return PaymentErrorResponseDto.fromJSONObject(jsonObject);

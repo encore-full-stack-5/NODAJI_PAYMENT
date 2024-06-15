@@ -3,6 +3,7 @@ package com.nodaji.payment.controller;
 import com.nodaji.payment.global.domain.exception.AccountExistException;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
 import com.nodaji.payment.global.domain.exception.BalanceNotZeroException;
+import com.nodaji.payment.global.domain.exception.ExceedsBalanceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -25,6 +26,12 @@ public class ExceptionController {
     @ExceptionHandler(BalanceNotZeroException.class)
     @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
     public String BalanceNotZeroExceptionHandler(BalanceNotZeroException e){
+        return e.getMessage();
+    }
+
+    @ExceptionHandler(ExceedsBalanceException.class)
+    @ResponseStatus(HttpStatus.NOT_ACCEPTABLE)
+    public String ExceedsBalanceExceptionHandler(ExceedsBalanceException e){
         return e.getMessage();
     }
 
