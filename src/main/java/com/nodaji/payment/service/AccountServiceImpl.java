@@ -1,6 +1,5 @@
 package com.nodaji.payment.service;
 
-import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.Account;
@@ -13,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 
 
 @Service
@@ -108,7 +108,7 @@ public class AccountServiceImpl implements AccountService {
      * 예치금 거래내역 조회
      */
     @Override
-    public void getTransactionHistory(String userId) {
-        // 거래내역을 가져오는 메소드
+    public List<History> getTransactionHistory(String userId) {
+        return historyRepository.findByUserIdOrderByCreatedAtDesc(userId);
     }
 }

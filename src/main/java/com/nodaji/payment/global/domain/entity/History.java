@@ -13,7 +13,6 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Table(name = "HISTORY"
-//        ,indexes = {@Index(columnList = "CATEGORY_ID")}
 )
 public class History {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,7 +23,7 @@ public class History {
     @Column(name = "PRICE")
     private Long price;
     @Column(name = "CREATED_AT")
-    private Date created_at;
+    private Date createdAt;
     @Column(name = "USER_ID")
     private String userId;
 
@@ -32,7 +31,7 @@ public class History {
         return History.builder()
                 .transaction_status("출금")
                 .price(req.price()+req.charge())
-                .created_at(new Date())
+                .createdAt(new Date())
                 .userId(userId)
                 .build();
     }
@@ -40,7 +39,7 @@ public class History {
         return History.builder()
                 .transaction_status("입금")
                 .price(price)
-                .created_at(new Date())
+                .createdAt(new Date())
                 .userId(userId)
                 .build();
     }
