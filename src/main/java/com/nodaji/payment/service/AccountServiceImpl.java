@@ -1,5 +1,6 @@
 package com.nodaji.payment.service;
 
+import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.Account;
@@ -65,6 +66,18 @@ public class AccountServiceImpl implements AccountService {
     }
 
     /**
+     * 결제시 예치금 차감
+     */
+    @Override
+    @Transactional
+    public void deductPoint(String userId, BuyRequestDto req){
+        Account account = accountRepository.findById(userId).orElseThrow(AccountNotFoundException::new);
+        if(req.amount() > account.getPoint()) throw new BalanceNotEnoughException();
+        account.setPoint(account.getPoint()-req.amount());
+        accountRepository.save(account);
+    }
+
+    /**
      * 예치금 충전
      */
     @Override
@@ -101,6 +114,14 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void createWithdrawHistory(String userId, WithdrawRequestDto req) {
+        historyRepository.save(new History().toEntity(userId, req));
+    }
+
+    /**
+     * 결제 거래내역 추가
+     */
+    @Override
+    public void createBuyHistory(String userId, BuyRequestDto req) {
         historyRepository.save(new History().toEntity(userId, req));
     }
 

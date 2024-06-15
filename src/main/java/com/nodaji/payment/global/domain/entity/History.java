@@ -1,5 +1,6 @@
 package com.nodaji.payment.global.domain.entity;
 
+import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import jakarta.persistence.*;
@@ -39,6 +40,15 @@ public class History {
         return History.builder()
                 .transaction_status("입금")
                 .price(price)
+                .createdAt(new Date())
+                .userId(userId)
+                .build();
+    }
+
+    public History toEntity(String userId, BuyRequestDto req){
+        return History.builder()
+                .transaction_status(req.type())
+                .price(req.amount())
                 .createdAt(new Date())
                 .userId(userId)
                 .build();
