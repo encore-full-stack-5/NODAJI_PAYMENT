@@ -114,7 +114,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void createWithdrawHistory(String userId, WithdrawRequestDto req) {
-        historyRepository.save(new History().toEntity(userId, req));
+        historyRepository.save(req.toEntity(userId, req));
     }
 
     /**
@@ -122,7 +122,7 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     public void createBuyHistory(String userId, BuyRequestDto req) {
-        historyRepository.save(new History().toEntity(userId, req));
+        historyRepository.save(BuyRequestDto.toEntity(userId, req));
     }
 
     /**

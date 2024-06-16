@@ -28,14 +28,7 @@ public class History {
     @Column(name = "USER_ID")
     private String userId;
 
-    public History toEntity(String userId, WithdrawRequestDto req){
-        return History.builder()
-                .transaction_status("출금")
-                .price(req.price()+req.charge())
-                .createdAt(new Date())
-                .userId(userId)
-                .build();
-    }
+
     public History toEntity(String userId, Long price){
         return History.builder()
                 .transaction_status("입금")
@@ -45,13 +38,5 @@ public class History {
                 .build();
     }
 
-    public History toEntity(String userId, BuyRequestDto req){
-        return History.builder()
-                .transaction_status(req.type())
-                .price(req.amount())
-                .createdAt(new Date())
-                .userId(userId)
-                .build();
-    }
 
 }
