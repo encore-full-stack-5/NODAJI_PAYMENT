@@ -3,7 +3,9 @@ package com.nodaji.payment.service;
 import com.nodaji.payment.dto.response.PaymentErrorResponseDto;
 import com.nodaji.payment.dto.response.PaymentSuccessResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
+import com.nodaji.payment.global.domain.entity.PaymentHistory;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
+import com.nodaji.payment.global.domain.repository.PaymentHistoryRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
@@ -24,9 +26,8 @@ import java.util.Base64;
 @Slf4j
 public class PaymentServiceImpl implements PaymentService {
 
+    private final PaymentHistoryRepository paymentHistoryRepository;
     private final AccountService accountService;
-    private final PaymentHistoryService paymentHistoryService;
-
 
     @Value("${paymentSecretKey}")
     private String paymentSecretKey;
@@ -48,13 +49,18 @@ public class PaymentServiceImpl implements PaymentService {
 //            충전 내역 저장
             accountService.createDepositHistory(userId,amount);
 //            결제 내역 저장
-            paymentHistoryService.createPaymentHistory(jsonObject, userId);
+            createPaymentHistory(jsonObject, userId);
 
             return PaymentSuccessResponseDto.fromJSONObject(jsonObject);
         } else {
             return PaymentErrorResponseDto.fromJSONObject(jsonObject);
         }
 
+    }
+
+    @Override
+    public void createPaymentHistory(JSONObject jsonObject, String userId) {
+        paymentHistoryRepository.save(new PaymentHistory().toEntity(jsonObject,userId));
     }
 
 

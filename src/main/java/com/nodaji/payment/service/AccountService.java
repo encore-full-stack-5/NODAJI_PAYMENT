@@ -3,6 +3,7 @@ package com.nodaji.payment.service;
 import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.DepositRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
+import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
 
@@ -24,4 +25,5 @@ public interface AccountService {
     void createDepositHistory(String userId, Long price);
     void createBuyHistory(String userId, BuyRequestDto req);
     Boolean isExistAccount(String userId);
+    BuyResponseDto buyItems(String userId, BuyRequestDto req);
 }
