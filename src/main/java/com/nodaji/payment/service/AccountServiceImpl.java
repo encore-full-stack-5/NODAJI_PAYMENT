@@ -2,6 +2,7 @@ package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
+import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.entity.History;
@@ -131,5 +132,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public List<History> getTransactionHistory(String userId) {
         return historyRepository.findByUserIdOrderByCreatedAtDesc(userId);
+    }
+
+    @Override
+    @Transactional
+    public BuyResponseDto buyItems(String userId, BuyRequestDto req){
+//        예치금 차감
+        deductPoint(userId,req);
+//        거래내역 기록
+        createBuyHistory(userId,req);
+        return BuyResponseDto.from("success");
     }
 }

@@ -1,6 +1,8 @@
 package com.nodaji.payment.controller;
 
+import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
+import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.service.AccountService;
@@ -71,5 +73,13 @@ public class AccountController {
         return accountService.getTransactionHistory(userId);
     }
 
+    /**
+     * 구매 요청
+     */
+    @PostMapping("/buy/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BuyResponseDto buy(@PathVariable("userId") String userId, @RequestBody BuyRequestDto req){
+        return accountService.buyItems(userId, req);
+    };
 
 }
