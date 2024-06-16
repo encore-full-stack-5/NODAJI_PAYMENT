@@ -106,8 +106,8 @@ public class AccountServiceImpl implements AccountService {
      * 입금 거래내역 추가
      */
     @Override
-    public void createDepositHistory(String userId, Long req) {
-        historyRepository.save(new History().toEntity(userId, req));
+    public void createDepositHistory(String userId, Long price) {
+        historyRepository.save(new History().toEntity(userId, price));
     }
     /**
      * 출금 거래내역 추가

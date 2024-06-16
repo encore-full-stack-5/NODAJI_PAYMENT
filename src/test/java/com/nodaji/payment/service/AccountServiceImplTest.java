@@ -1,10 +1,11 @@
 package com.nodaji.payment.service;
 
+import com.nodaji.payment.dto.request.BuyRequestDto;
+import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.Account;
-import com.nodaji.payment.global.domain.exception.AccountExistException;
-import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
-import com.nodaji.payment.global.domain.exception.BalanceNotZeroException;
+import com.nodaji.payment.global.domain.entity.History;
+import com.nodaji.payment.global.domain.exception.*;
 import com.nodaji.payment.global.domain.repository.AccountRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,6 +27,17 @@ class AccountServiceImplTest {
 
     @Autowired
     AccountServiceImpl accountService;
+
+
+    @Test
+    @DisplayName("계좌 생성 테스트")
+    @Transactional
+    void isExistAccount(){
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        Boolean existAccount = accountService.isExistAccount("userId");
+        assertEquals(true,existAccount);
+    }
 
     @Test
     @DisplayName("계좌 생성 테스트")
@@ -86,14 +98,69 @@ class AccountServiceImplTest {
     }
 
     @Test
+    @Transactional
+    @DisplayName("결제시 예치금 차감 테스트")
+    void deductPoint(){
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        accountService.deductPoint("userId",new BuyRequestDto("결제", 1000L));
+        PointResponseDto userId = accountService.getPoint("userId");
+        assertEquals(9000L,userId.point());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("결제시 결제금액이 예치금보다 클 때 예외 테스트")
+    void deductPointMoreThanDeposit(){
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        BalanceNotEnoughException balanceNotEnoughException = assertThrows(BalanceNotEnoughException.class,()->accountService.deductPoint("userId",new BuyRequestDto("결제", 100000L)));
+        assertEquals("예치금 잔액이 부족합니다.",balanceNotEnoughException.getMessage());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("예치금 충전 테스트")
     void depositPoint() {
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        accountService.depositPoint("userId",10000L);
+        PointResponseDto userId = accountService.getPoint("userId");
+        assertEquals(20000L,userId.point());
     }
 
     @Test
+    @Transactional
+    @DisplayName("예치금 출금 테스트")
     void withdrawPoint() {
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5000L,"신한","123-456-789","ownerName"));
+        PointResponseDto userId = accountService.getPoint("userId");
+        assertEquals(0L,userId.point());
     }
 
     @Test
+    @Transactional
+    @DisplayName("예치금 출금 예외 테스트(출금 금액이 예치금 + 수수료 보다 많을때")
+    void withdrawPointMoreThanDeposit() {
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+        ExceedsBalanceException exceedsBalanceException = assertThrows(ExceedsBalanceException.class,()->accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5001L,"신한","123-456-789","ownerName")));
+        assertEquals("출금하려는 금액이 예치금과 수수료의 합보다 많습니다.",exceedsBalanceException.getMessage());
+    }
+
+
+    @Test
+    @Transactional
+    @DisplayName("예치금 거래내역 조회 테스트")
     void getTransactionHistory() {
+        accountService.createDepositHistory("userId1",20000L);
+        accountService.createWithdrawHistory("userId1",new WithdrawRequestDto(500L,500L,"신한","123-456-789","ownerName"));
+        accountService.createBuyHistory("userId1",new BuyRequestDto("동행복권결제",10000L));
+        List<History> userId1 = accountService.getTransactionHistory("userId1");
+        assertEquals(userId1.get(0).getPrice(),10000L);
+        assertEquals(userId1.get(1).getPrice(),1000L);
+        assertEquals(userId1.get(2).getPrice(),20000L);
     }
 }
