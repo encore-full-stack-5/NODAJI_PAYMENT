@@ -51,13 +51,13 @@ public class PaymentServiceImplTest {
     @BeforeEach
     public void setUp() {
         jsonObject = new JSONObject();
-        jsonObject.put("orderId", "12345");
-        jsonObject.put("type", "type1");
-        jsonObject.put("method", "credit");
-        jsonObject.put("approvedAt", "2023-06-17T00:00:00");
-        jsonObject.put("totalAmount", "1000");
-        jsonObject.put("status", "approved");
-        jsonObject.put("orderName", "orderName1");
+        jsonObject.put("orderId", "mDkwA97bvLXaMyl5tZRpY");
+        jsonObject.put("type", "NORMAL");
+        jsonObject.put("orderName", "토스 티셔츠 외 2건");
+        jsonObject.put("method", "간편결제");
+        jsonObject.put("approvedAt", "2024-06-17T12:06:28+09:00");
+        jsonObject.put("totalAmount", 50000);
+        jsonObject.put("status", "DONE");
         userId = "user123";
     }
 
@@ -86,22 +86,12 @@ public class PaymentServiceImplTest {
     @DisplayName("결제 성공 테스트")
     @Transactional
     public void testSuccessfulPayment() throws Exception {
-
-        JSONObject mockJsonObject = new JSONObject();
-        mockJsonObject.put("orderId", "mDkwA97bvLXaMyl5tZRpY");
-        mockJsonObject.put("type", "NORMAL");
-        mockJsonObject.put("orderName", "토스 티셔츠 외 2건");
-        mockJsonObject.put("method", "간편결제");
-        mockJsonObject.put("approvedAt", "2024-06-17T12:06:28+09:00");
-        mockJsonObject.put("totalAmount", 50000);
-        mockJsonObject.put("status", "DONE");
-
         when(accountService.isExistAccount(anyString())).thenReturn(true);
         when(paymentUtils.getAuthorizations()).thenReturn("authorizations");
         HttpURLConnection mockConnection = mock(HttpURLConnection.class);
         when(paymentUtils.getHttpURLConnection(anyString(), anyString())).thenReturn(mockConnection);
         when(mockConnection.getResponseCode()).thenReturn(200);
-        when(paymentUtils.getResponseJsonObject(any(), anyBoolean())).thenReturn(mockJsonObject);
+        when(paymentUtils.getResponseJsonObject(any(), anyBoolean())).thenReturn(jsonObject);
 
         PaymentSuccessResponseDto response = (PaymentSuccessResponseDto) paymentService.processPayment("user1", "order1", 100L, "paymentKey");
 
