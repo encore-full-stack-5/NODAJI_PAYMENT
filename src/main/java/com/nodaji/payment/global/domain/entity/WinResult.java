@@ -1,10 +1,7 @@
 package com.nodaji.payment.global.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -17,6 +14,7 @@ public class WinResult {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "RESULT_ID")
     private Long resultId;
+    @Setter
     @Column(name = "LEFT_MONTHS")
     private Integer leftMonths;
     @Column(name = "AMOUNT")
