@@ -14,9 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "PAYMENT_HISTORY"
-//        ,indexes = {@Index(columnList = "CATEGORY_ID")}
-)
+@Table(name = "PAYMENT_HISTORY")
 public class PaymentHistory {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "HISTORY_ID")
