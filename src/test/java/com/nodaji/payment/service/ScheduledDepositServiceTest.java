@@ -5,6 +5,7 @@ import com.nodaji.payment.global.domain.entity.WinResult;
 import com.nodaji.payment.global.domain.repository.AccountRepository;
 import com.nodaji.payment.global.domain.repository.WinResultRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -44,6 +45,7 @@ class ScheduledDepositServiceTest {
 
 
     @Test
+    @DisplayName("자동 예치금 지급 테스트")
     void addPensionAmountToDeposit() {
         // given
         scheduledDepositService.addPensionAmountToDeposit();
