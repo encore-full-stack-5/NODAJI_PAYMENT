@@ -1,8 +1,5 @@
 package com.nodaji.payment.global.domain.entity;
 
-import com.nodaji.payment.dto.request.BuyRequestDto;
-import com.nodaji.payment.dto.request.DepositRequestDto;
-import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,8 +10,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "HISTORY"
-)
+@Table(name = "HISTORY")
 public class History {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "HISTORY_ID")
