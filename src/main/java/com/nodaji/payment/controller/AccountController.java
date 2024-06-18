@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/accounts")
 public class AccountController {
     private final AccountService accountService;
 
@@ -67,19 +67,11 @@ public class AccountController {
     /**
      * 예치금 거래 내역 조회
      */
-    @GetMapping("/{userId}/history")
+    @GetMapping("/{userId}/histories")
     @ResponseStatus(HttpStatus.OK)
     public List<History> getTransactionHistory(@PathVariable("userId") String userId){
         return accountService.getTransactionHistory(userId);
     }
 
-    /**
-     * 구매 요청
-     */
-    @PostMapping("/buy/{userId}")
-    @ResponseStatus(HttpStatus.OK)
-    public BuyResponseDto buy(@PathVariable("userId") String userId, @RequestBody BuyRequestDto req){
-        return accountService.buyItems(userId, req);
-    };
 
 }
