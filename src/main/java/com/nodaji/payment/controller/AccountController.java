@@ -1,8 +1,6 @@
 package com.nodaji.payment.controller;
 
-import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
-import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.service.AccountService;
@@ -72,6 +70,4 @@ public class AccountController {
     public List<History> getTransactionHistory(@PathVariable("userId") String userId){
         return accountService.getTransactionHistory(userId);
     }
-
-
 }

@@ -8,9 +8,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "ACCOUNTS"
-//        ,indexes = {@Index(columnList = "CATEGORY_ID")}
-)
+@Table(name = "ACCOUNTS")
 public class Account {
     @Id
     @Column(name = "USER_ID")

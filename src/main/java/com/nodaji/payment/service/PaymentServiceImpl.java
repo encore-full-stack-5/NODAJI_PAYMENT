@@ -2,7 +2,6 @@ package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.response.PaymentErrorResponseDto;
 import com.nodaji.payment.dto.response.PaymentSuccessResponseDto;
-import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.global.domain.entity.PaymentHistory;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
 import com.nodaji.payment.global.domain.repository.PaymentHistoryRepository;
@@ -10,17 +9,10 @@ import com.nodaji.payment.utils.PaymentUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 @Service
 @RequiredArgsConstructor
