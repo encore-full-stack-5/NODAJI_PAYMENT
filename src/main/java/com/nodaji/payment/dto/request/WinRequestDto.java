@@ -7,7 +7,7 @@ public record WinRequestDto (String type, Integer leftMonths, Long amount){
     public WinResult toEntity(String userId,WinRequestDto req){
         return WinResult.builder()
                 .resultId(null)
-                .leftMonths(req.leftMonths)
+                .leftMonths(req.leftMonths())
                 .amount(req.amount())
                 .userId(userId)
                 .build();

@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface WinResultRepository extends JpaRepository<WinResult, Long> {
+
+    WinResult findByUserId(String userId);
     @Query("SELECT w FROM WinResult w WHERE w.leftMonths > 0")
     List<WinResult> findAllValidWinResults();
 }

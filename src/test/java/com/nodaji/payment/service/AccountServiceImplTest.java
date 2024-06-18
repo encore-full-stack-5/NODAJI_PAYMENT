@@ -78,7 +78,7 @@ class AccountServiceImplTest {
         // when
         boolean existsById = accountRepository.existsById("userId");
         // then
-        assertEquals(false,existsById);
+        assertFalse(existsById);
     }
 
     @Test
