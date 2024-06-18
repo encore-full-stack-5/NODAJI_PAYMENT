@@ -34,7 +34,10 @@ class WinResultServiceImplTest {
 
     @BeforeEach
     void beforeEach() {
-        Account account = new Account(userId,10000L);
+        winResultRepository.deleteAll();
+        accountRepository.deleteAll();
+
+        Account account = new Account(userId, 10000L);
         accountRepository.save(account);
     }
 
@@ -67,10 +70,10 @@ class WinResultServiceImplTest {
         // given
         winResultService.winResultProcess(userId,new WinRequestDto("연금복권",10,1_000_000L));
         // when
-        Optional<WinResult> byId = winResultRepository.findById(1L);
+        WinResult byUserId = winResultRepository.findByUserId(userId);
         // then
-        assertEquals(10,byId.get().getLeftMonths());
-        assertEquals(1_000_000L,byId.get().getAmount());
-        assertEquals(userId,byId.get().getUserId());
+        assertEquals(10,byUserId.getLeftMonths());
+        assertEquals(1_000_000L,byUserId.getAmount());
+        assertEquals(userId,byUserId.getUserId());
     }
 }
