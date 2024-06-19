@@ -85,7 +85,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void depositPoint(String userId, Long amount) {
         Account account = accountRepository.findById(userId)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(AccountNotFoundException::new);
         account.setPoint(account.getPoint()+amount);
         accountRepository.save(account);
     }
@@ -95,7 +95,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     @Transactional
     public void withdrawPoint(String userId, WithdrawRequestDto req) {
-        Account account = accountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+        Account account = accountRepository.findById(userId).orElseThrow(AccountNotFoundException::new);
 //        출금하려는 금액이 예치금+수수료보다 많을 때 예외
         if(account.getPoint()<(req.price()+req.charge())) throw new ExceedsBalanceException();
         account.setPoint(account.getPoint()-(req.price()+req.charge()));
