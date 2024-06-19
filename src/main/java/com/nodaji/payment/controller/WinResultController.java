@@ -13,6 +13,9 @@ public class WinResultController {
 
     private final WinResultService winResultService;
 
+    /**
+     * 당첨 결과 전달
+     */
     @PostMapping("/{userId}")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public void winResult(@PathVariable(name = "userId") String userId, @RequestBody WinRequestDto req){
