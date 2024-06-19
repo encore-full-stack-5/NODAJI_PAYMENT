@@ -73,9 +73,7 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void deductPoint(String userId, BuyRequestDto req){
         Account account = accountRepository.findById(userId).orElseThrow(AccountNotFoundException::new);
-        if(req.amount() > account.getPoint()) throw new BalanceNotEnoughException();
-        account.setPoint(account.getPoint()-req.amount());
-        accountRepository.save(account);
+        account.decreaseBalance(req.amount());
     }
 
     /**
@@ -86,8 +84,7 @@ public class AccountServiceImpl implements AccountService {
     public void depositPoint(String userId, Long amount) {
         Account account = accountRepository.findById(userId)
                 .orElseThrow(AccountNotFoundException::new);
-        account.setPoint(account.getPoint()+amount);
-        accountRepository.save(account);
+        account.increaseBalance(amount);
     }
     /**
      * 예치금 출금
@@ -97,9 +94,7 @@ public class AccountServiceImpl implements AccountService {
     public void withdrawPoint(String userId, WithdrawRequestDto req) {
         Account account = accountRepository.findById(userId).orElseThrow(AccountNotFoundException::new);
 //        출금하려는 금액이 예치금+수수료보다 많을 때 예외
-        if(account.getPoint()<(req.price()+req.charge())) throw new ExceedsBalanceException();
-        account.setPoint(account.getPoint()-(req.price()+req.charge()));
-        accountRepository.save(account);
+        account.decreaseBalanceWithCharge(req.price(),req.charge());
 //        거래내역에 추가
         createWithdrawHistory(userId, req);
     }
