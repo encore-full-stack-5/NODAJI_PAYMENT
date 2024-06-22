@@ -7,6 +7,7 @@ import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.global.domain.exception.*;
 import com.nodaji.payment.global.domain.repository.AccountRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,14 +29,16 @@ class AccountServiceImplTest {
     @Autowired
     AccountServiceImpl accountService;
 
+    @BeforeEach
+    void setUp(){
+        Account account = new Account("userId",10000L);
+        accountRepository.save(account);
+    }
 
     @Test
     @DisplayName("계좌 생성 테스트")
     @Transactional
     void isExistAccount(){
-        // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         // when
         Boolean existAccount = accountService.isExistAccount("userId");
         // then
@@ -46,21 +49,17 @@ class AccountServiceImplTest {
     @DisplayName("계좌 생성 테스트")
     @Transactional
     void createAccount() {
-        // given
-        accountService.createAccount("userId");
         // when
         Account byUserId = accountRepository.findByUserId("userId");
         // then
         assertEquals("userId", byUserId.getUserId());
-        assertEquals(0L, byUserId.getPoint());
+        assertEquals(10000L, byUserId.getPoint());
     }
 
     @Test
     @DisplayName("계좌 중복 생성 예외 테스트")
     @Transactional
     void createExistAccount() {
-        // given
-        accountService.createAccount("userId");
         // when
         AccountExistException existException = assertThrows(AccountExistException.class,()->accountService.createAccount("userId"));
         // then
@@ -72,11 +71,10 @@ class AccountServiceImplTest {
     @Transactional
     void deleteAccount() {
         // given
-        Account account = new Account("userId",0L);
-        accountRepository.save(account);
-        accountService.deleteAccount("userId");
+        accountService.createAccount("userId1");
+        accountService.deleteAccount("userId1");
         // when
-        boolean existsById = accountRepository.existsById("userId");
+        boolean existsById = accountRepository.existsById("userId1");
         // then
         assertFalse(existsById);
     }
@@ -85,9 +83,6 @@ class AccountServiceImplTest {
     @DisplayName("계좌 삭제시 예치금이 0원보다 클 때 예외 테스트")
     @Transactional
     void deleteAccountMoreThanZeroException() {
-        // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         // when
         BalanceNotZeroException NotZeroException = assertThrows(BalanceNotZeroException.class,()->accountService.deleteAccount("userId"));
         // then
@@ -98,9 +93,6 @@ class AccountServiceImplTest {
     @DisplayName("포인트 조회 테스트")
     @Transactional
     void getPoint() {
-        // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         // when
         PointResponseDto userId = accountService.getPoint("userId");
         // then
@@ -111,7 +103,10 @@ class AccountServiceImplTest {
     @DisplayName("포인트 조회 예외 테스트(해당 계좌가 존재하지 않을 때)")
     @Transactional
     void getPointNotExistAccountException() {
-        // given & when
+
+        // given
+        accountRepository.deleteById("userId");
+        // when
         AccountNotFoundException accountNotFoundException = assertThrows(AccountNotFoundException.class,()->accountService.getPoint("userId"));
         // then
         assertEquals("해당 계좌가 없습니다.",accountNotFoundException.getMessage());
@@ -121,9 +116,6 @@ class AccountServiceImplTest {
     @Transactional
     @DisplayName("결제시 예치금 차감 테스트")
     void deductPoint(){
-        // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         // when
         accountService.deductPoint("userId",new BuyRequestDto("결제", 1000L));
         PointResponseDto userId = accountService.getPoint("userId");
@@ -135,9 +127,6 @@ class AccountServiceImplTest {
     @Transactional
     @DisplayName("결제시 결제금액이 예치금보다 클 때 예외 테스트")
     void deductPointMoreThanDeposit(){
-        // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         // when
         BalanceNotEnoughException balanceNotEnoughException = assertThrows(BalanceNotEnoughException.class,()->accountService.deductPoint("userId",new BuyRequestDto("결제", 100000L)));
         // then
@@ -148,9 +137,6 @@ class AccountServiceImplTest {
     @Transactional
     @DisplayName("예치금 충전 테스트")
     void depositPoint() {
-        // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         // when
         accountService.depositPoint("userId",10000L);
         PointResponseDto userId = accountService.getPoint("userId");
@@ -159,12 +145,9 @@ class AccountServiceImplTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("예치금 출금 테스트")
     void withdrawPoint() {
         // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5000L,"신한","123-456-789","ownerName"));
         // when
         PointResponseDto userId = accountService.getPoint("userId");
@@ -173,12 +156,8 @@ class AccountServiceImplTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("예치금 출금 예외 테스트(출금 금액이 예치금 + 수수료 보다 많을때")
     void withdrawPointMoreThanDeposit() {
-        // given
-        Account account = new Account("userId",10000L);
-        accountRepository.save(account);
         // when
         ExceedsBalanceException exceedsBalanceException = assertThrows(ExceedsBalanceException.class,()->accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5001L,"신한","123-456-789","ownerName")));
         // then

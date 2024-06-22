@@ -1,5 +1,7 @@
-package com.nodaji.payment.global.concurrency.config;
+package com.nodaji.payment.global.concurrency.aop;
 
+import com.nodaji.payment.global.concurrency.utils.CustomSpringELParser;
+import com.nodaji.payment.global.concurrency.utils.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -20,10 +22,9 @@ public class DistributedLockAop {
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
 
-    @Around("@annotation(com.nodaji.payment.global.concurrency.config.DistributedLock)")
+    @Around("@annotation(com.nodaji.payment.global.concurrency.utils.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        log.info("Method signature: {}", signature.toLongString());
 
         Method method = signature.getMethod();
         DistributedLock distributedLock = method.getAnnotation(DistributedLock.class);
@@ -35,21 +36,17 @@ public class DistributedLockAop {
         String key = REDISSON_LOCK_PREFIX + CustomSpringELParser.getDynamicValue(parameterNames, joinPoint.getArgs(), distributedLock.key());
 
         RLock rLock = redissonClient.getLock(key);
-        log.info("Trying to acquire lock: {}", key);
 
         boolean acquired = rLock.tryLock(distributedLock.waitTime(), distributedLock.leaseTime(), distributedLock.timeUnit());
         if (!acquired) {
-            log.warn("Could not acquire lock: {}", key);
             return null; // 락을 획득하지 못한 경우 null 반환
         }
 
         try {
-            log.info("Lock acquired: {}", key);
             return aopForTransaction.proceed(joinPoint);
         } finally {
             if (rLock.isHeldByCurrentThread()) {
                 rLock.unlock();
-                log.info("Lock released: {}", key);
             }
         }
     }

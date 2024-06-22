@@ -1,4 +1,4 @@
-package com.nodaji.payment.global.concurrency.config;
+package com.nodaji.payment.global.concurrency.aop;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.springframework.stereotype.Component;
