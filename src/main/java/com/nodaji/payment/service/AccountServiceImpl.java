@@ -4,6 +4,7 @@ import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
+import com.nodaji.payment.global.concurrency.config.DistributedLock;
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.global.domain.exception.*;
@@ -90,7 +91,7 @@ public class AccountServiceImpl implements AccountService {
      * 예치금 출금
      */
     @Override
-    @Transactional
+    @DistributedLock(key = "#userId")
     public void withdrawPoint(String userId, WithdrawRequestDto req) {
         Account account = accountRepository.findById(userId).orElseThrow(AccountNotFoundException::new);
 //        출금하려는 금액이 예치금+수수료보다 많을 때 예외
