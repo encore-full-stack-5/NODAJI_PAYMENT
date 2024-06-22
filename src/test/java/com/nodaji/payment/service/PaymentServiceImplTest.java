@@ -1,10 +1,8 @@
 package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.response.PaymentSuccessResponseDto;
-import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.entity.PaymentHistory;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
-import com.nodaji.payment.global.domain.repository.AccountRepository;
 import com.nodaji.payment.global.domain.repository.PaymentHistoryRepository;
 import com.nodaji.payment.utils.PaymentUtils;
 import org.json.simple.JSONObject;
@@ -14,17 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;

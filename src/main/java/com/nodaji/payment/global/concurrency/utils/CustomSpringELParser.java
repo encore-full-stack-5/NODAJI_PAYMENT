@@ -1,4 +1,4 @@
-package com.nodaji.payment.global.concurrency.config;
+package com.nodaji.payment.global.concurrency.utils;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.expression.ExpressionParser;

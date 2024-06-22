@@ -2,7 +2,6 @@ package com.nodaji.payment.utils;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,11 +13,8 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import java.io.*;
 import java.net.HttpURLConnection;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)

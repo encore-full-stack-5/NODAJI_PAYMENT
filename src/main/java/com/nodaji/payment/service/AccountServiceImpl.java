@@ -4,7 +4,7 @@ import com.nodaji.payment.dto.request.BuyRequestDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
-import com.nodaji.payment.global.concurrency.config.DistributedLock;
+import com.nodaji.payment.global.concurrency.utils.DistributedLock;
 import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.global.domain.exception.*;
