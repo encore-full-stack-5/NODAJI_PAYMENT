@@ -46,7 +46,7 @@ public class AccountController {
     /**
      * 예치금 충전 (타 결제 시스템과 연동)
      */
-    @PostMapping("/{userId}/deposit")
+    @PutMapping("/{userId}/deposit")
     @ResponseStatus(HttpStatus.OK)
     public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody Long amount){
 
@@ -56,7 +56,7 @@ public class AccountController {
     /**
      * 예치금 출금 (다른 은행 시스템과 연동)
      */
-    @PostMapping("/{userId}/withdraw")
+    @PutMapping("/{userId}/withdraw")
     @ResponseStatus(HttpStatus.OK)
     public void withdrawFromAccount(@PathVariable("userId") String userId, @RequestBody WithdrawRequestDto req){
         accountService.withdrawPoint(userId, req);
