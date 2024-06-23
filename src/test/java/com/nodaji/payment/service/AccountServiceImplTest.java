@@ -15,6 +15,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -148,7 +151,7 @@ class AccountServiceImplTest {
     @DisplayName("예치금 출금 테스트")
     void withdrawPoint() {
         // given
-        accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5000L,"신한","123-456-789","ownerName"));
+        accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5000L,"신한","123456789"));
         // when
         PointResponseDto userId = accountService.getPoint("userId");
         // then
@@ -159,7 +162,7 @@ class AccountServiceImplTest {
     @DisplayName("예치금 출금 예외 테스트(출금 금액이 예치금 + 수수료 보다 많을때")
     void withdrawPointMoreThanDeposit() {
         // when
-        ExceedsBalanceException exceedsBalanceException = assertThrows(ExceedsBalanceException.class,()->accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5001L,"신한","123-456-789","ownerName")));
+        ExceedsBalanceException exceedsBalanceException = assertThrows(ExceedsBalanceException.class,()->accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5001L,"신한","123456789")));
         // then
         assertEquals("출금하려는 금액이 예치금과 수수료의 합보다 많습니다.",exceedsBalanceException.getMessage());
     }
@@ -168,13 +171,16 @@ class AccountServiceImplTest {
     @Test
     @Transactional
     @DisplayName("예치금 거래내역 조회 테스트")
-    void getTransactionHistory() {
+    void getTransactionHistory() throws ParseException {
         // given
         accountService.createDepositHistory("userId1",20000L);
-        accountService.createWithdrawHistory("userId1",new WithdrawRequestDto(500L,500L,"신한","123-456-789","ownerName"));
+        accountService.createWithdrawHistory("userId1",new WithdrawRequestDto(500L,500L,"신한","123456789"));
         accountService.createBuyHistory("userId1",new BuyRequestDto("동행복권결제",10000L));
         // when
-        List<History> userId1 = accountService.getTransactionHistory("userId1");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date startDate = dateFormat.parse("2023-01-01");
+        Date endDate = dateFormat.parse("2100-12-31");
+        List<History> userId1 = accountService.getTransactionHistory("userId1",startDate,endDate);
         // then
         assertEquals(userId1.get(0).getPrice(),10000L);
         assertEquals(userId1.get(1).getPrice(),1000L);

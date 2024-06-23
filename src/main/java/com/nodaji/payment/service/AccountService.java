@@ -7,6 +7,7 @@ import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
 
+import java.util.Date;
 import java.util.List;
 
 public interface AccountService {
@@ -20,7 +21,8 @@ public interface AccountService {
     void deductPoint(String userId, BuyRequestDto req);
     void withdrawPoint(String userId, WithdrawRequestDto req);
 
-    List<History> getTransactionHistory(String userId);
+    List<History> getTransactionHistory(String userId, Date startDate, Date endDate);
+    List<History> getWithdrawHistory(String userId, Date startDate, Date endDate);
     void createWithdrawHistory(String userId, WithdrawRequestDto req);
     void createDepositHistory(String userId, Long price);
     void createBuyHistory(String userId, BuyRequestDto req);

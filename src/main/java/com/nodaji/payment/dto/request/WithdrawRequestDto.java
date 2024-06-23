@@ -8,15 +8,16 @@ public record WithdrawRequestDto (
         Long price,
         Long charge,
         String bankName,
-        String accountNum,
-        String accountOwnerName
+        String accountNum
 ){
     public History toEntity(String userId, WithdrawRequestDto req){
         return History.builder()
-                .transaction_status("출금")
+                .transactionStatus("출금")
                 .price(req.price()+req.charge())
                 .createdAt(new Date())
                 .userId(userId)
+                .withdrawBankName(req.bankName())
+                .withdrawAccountNum(req.accountNum())
                 .build();
     }
 }
