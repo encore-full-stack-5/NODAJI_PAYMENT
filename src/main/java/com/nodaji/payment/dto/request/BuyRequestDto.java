@@ -9,7 +9,7 @@ public record BuyRequestDto (String type, Long amount){
 
     public static History toEntity(String userId, BuyRequestDto req){
         return History.builder()
-                .transaction_status(req.type())
+                .transactionStatus(req.type())
                 .price(req.amount())
                 .createdAt(new Date())
                 .userId(userId)

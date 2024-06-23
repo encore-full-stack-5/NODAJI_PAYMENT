@@ -5,9 +5,11 @@ import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.service.AccountService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -49,7 +51,6 @@ public class AccountController {
     @PutMapping("/{userId}/deposit")
     @ResponseStatus(HttpStatus.OK)
     public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody Long amount){
-
         accountService.depositPoint(userId, amount);
     }
 //
@@ -67,7 +68,21 @@ public class AccountController {
      */
     @GetMapping("/{userId}/histories")
     @ResponseStatus(HttpStatus.OK)
-    public List<History> getTransactionHistory(@PathVariable("userId") String userId){
-        return accountService.getTransactionHistory(userId);
+    public List<History> getTransactionHistory(
+            @PathVariable("userId") String userId,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate){
+        return accountService.getTransactionHistory(userId,startDate, endDate);
+    }
+    /**
+     * 출금 거래 내역 조회
+     */
+    @GetMapping("/{userId}/histories/withdraw")
+    @ResponseStatus(HttpStatus.OK)
+    public List<History> getWithdrawHistory(
+            @PathVariable("userId") String userId,
+            @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate){
+        return accountService.getWithdrawHistory(userId,startDate, endDate);
     }
 }

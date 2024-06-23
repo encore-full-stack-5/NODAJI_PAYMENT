@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 
@@ -126,8 +127,16 @@ public class AccountServiceImpl implements AccountService {
      * 예치금 거래내역 조회
      */
     @Override
-    public List<History> getTransactionHistory(String userId) {
-        return historyRepository.findByUserIdOrderByCreatedAtDesc(userId);
+    public List<History> getTransactionHistory(String userId, Date startDate, Date endDate) {
+        return historyRepository.findHistoryByUserIdAndDateRange(userId,startDate,endDate);
+    }
+
+    /**
+     * 출금 조회
+     */
+    @Override
+    public List<History> getWithdrawHistory(String userId, Date startDate, Date endDate) {
+        return historyRepository.findWithdrawHistoryByUserIdAndDateRange(userId,startDate,endDate);
     }
 
     @Override
