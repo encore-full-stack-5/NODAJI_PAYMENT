@@ -25,8 +25,7 @@ public class PaymentController {
     public BuyResponseDto buy(@PathVariable("userId") String userId, @RequestBody BuyRequestDto req){
         return accountService.buyItems(userId, req);
     };
-
-    @GetMapping("/success/{userId}")
+    @PostMapping("/success/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public Object submitPayment(
             @PathVariable(name = "userId") String userId,
@@ -35,8 +34,7 @@ public class PaymentController {
             @RequestParam(name = "paymentKey") String paymentKey) throws Exception {
         return paymentService.processPayment(userId, orderId, amount, paymentKey);
     }
-
-    @GetMapping("/fail")
+    @PostMapping("/fail")
     @ResponseStatus(HttpStatus.CONFLICT)
     public PaymentErrorResponseDto paymentResult(
             @RequestParam(value = "message") String message,
