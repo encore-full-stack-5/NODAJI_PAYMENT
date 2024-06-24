@@ -1,5 +1,6 @@
 package com.nodaji.payment.controller;
 
+import com.nodaji.payment.global.domain.dto.WinDepositDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
@@ -46,14 +47,14 @@ public class AccountController {
     }
 
     /**
-     * 예치금 충전 (타 결제 시스템과 연동)
+     * 당첨금 입금 (Feign)
      */
     @PutMapping("/{userId}/deposit")
     @ResponseStatus(HttpStatus.OK)
-    public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody Long amount){
-        accountService.depositPoint(userId, amount);
+    public void depositToAccount(@PathVariable("userId")  String userId, @RequestBody WinDepositDto req){
+        accountService.depositWinPoint(userId,req);
     }
-//
+
     /**
      * 예치금 출금 (다른 은행 시스템과 연동)
      */

@@ -1,6 +1,7 @@
 package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.request.BuyRequestDto;
+import com.nodaji.payment.global.domain.dto.WinDepositDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
@@ -89,6 +90,17 @@ public class AccountServiceImpl implements AccountService {
         account.increaseBalance(amount);
     }
     /**
+     * 예치금 충전(당첨)
+     */
+    @Override
+    @Transactional
+    public void depositWinPoint(String userId,WinDepositDto req) {
+        Account account = accountRepository.findById(userId)
+                .orElseThrow(AccountNotFoundException::new);
+        account.increaseBalance(req.amount());
+        createWinDepositHistory(userId,req);
+    }
+    /**
      * 예치금 출금
      */
     @Override
@@ -106,6 +118,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void createDepositHistory(String userId, Long price) {
         historyRepository.save(new History().toEntity(userId, price));
+    }
+    /**
+     * 당첨금 입금내역 추가
+     */
+    @Override
+    public void createWinDepositHistory(String userId, WinDepositDto req) {
+        historyRepository.save(req.toEntity(userId, req));
     }
     /**
      * 출금 거래내역 추가

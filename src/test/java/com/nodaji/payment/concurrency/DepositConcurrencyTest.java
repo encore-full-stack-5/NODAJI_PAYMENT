@@ -56,7 +56,7 @@ public class DepositConcurrencyTest {
     @Test
     @DisplayName("출금 동시성 처리 테스트")
     public void testConcurrentWithdrawals() throws InterruptedException {
-        WithdrawRequestDto req = new WithdrawRequestDto(withdrawPrice, withdrawCharge,"","","");
+        WithdrawRequestDto req = new WithdrawRequestDto(withdrawPrice, withdrawCharge,"","");
 
         int threadCount = 100;
         ExecutorService executorService = Executors.newFixedThreadPool(threadCount);
@@ -86,7 +86,7 @@ public class DepositConcurrencyTest {
     @DisplayName("출금 동시성 처리 결제금액 > 예치금 예외 테스트")
     public void testWithdrawExceedsBalance() {
         String userId = "user123";
-        WithdrawRequestDto req = new WithdrawRequestDto(400000000L, 10L,"","","");
+        WithdrawRequestDto req = new WithdrawRequestDto(400000000L, 10L,"","");
 
         assertThrows(ExceedsBalanceException.class, () -> {
             accountService.withdrawPoint(userId, req);
@@ -96,7 +96,7 @@ public class DepositConcurrencyTest {
     @Test
     @DisplayName("출금 동시성 처리 Lock을 못잡을 경우 예외 테스트")
     public void testLockNotAcquired() throws InterruptedException {
-        WithdrawRequestDto req = new WithdrawRequestDto(withdrawPrice, withdrawCharge, "", "", "");
+        WithdrawRequestDto req = new WithdrawRequestDto(withdrawPrice, withdrawCharge, "", "");
 
         // Lock을 미리 선점하여 Lock을 못하게 함.
         String lockKey = "LOCK:" + userId;
