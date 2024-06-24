@@ -1,7 +1,7 @@
 package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.request.BuyRequestDto;
-import com.nodaji.payment.dto.request.DepositRequestDto;
+import com.nodaji.payment.global.domain.dto.WinDepositDto;
 import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.BuyResponseDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
@@ -18,13 +18,16 @@ public interface AccountService {
     PointResponseDto getPoint(String userId);
 
     void depositPoint(String userId, Long req);
+    void depositWinPoint(String userId,WinDepositDto req);
     void deductPoint(String userId, BuyRequestDto req);
     void withdrawPoint(String userId, WithdrawRequestDto req);
 
     List<History> getTransactionHistory(String userId, Date startDate, Date endDate);
     List<History> getWithdrawHistory(String userId, Date startDate, Date endDate);
     void createWithdrawHistory(String userId, WithdrawRequestDto req);
+
     void createDepositHistory(String userId, Long price);
+    void createWinDepositHistory(String userId, WinDepositDto req);
     void createBuyHistory(String userId, BuyRequestDto req);
     Boolean isExistAccount(String userId);
     BuyResponseDto buyItems(String userId, BuyRequestDto req);
