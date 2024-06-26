@@ -5,6 +5,7 @@ import com.nodaji.payment.dto.request.WithdrawRequestDto;
 import com.nodaji.payment.dto.response.PointResponseDto;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.service.AccountService;
+import com.nodaji.payment.service.HistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("/api/v1/accounts")
 public class AccountController {
     private final AccountService accountService;
+    private final HistoryService historyService;
 
     /**
      * 예치금 계좌 생성
@@ -73,7 +75,7 @@ public class AccountController {
             @PathVariable("userId") String userId,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate){
-        return accountService.getTransactionHistory(userId,startDate, endDate);
+        return historyService.getTransactionHistory(userId,startDate, endDate);
     }
     /**
      * 출금 거래 내역 조회
@@ -84,6 +86,6 @@ public class AccountController {
             @PathVariable("userId") String userId,
             @RequestParam(value = "startDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
             @RequestParam(value = "endDate", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate){
-        return accountService.getWithdrawHistory(userId,startDate, endDate);
+        return historyService.getWithdrawHistory(userId,startDate, endDate);
     }
 }

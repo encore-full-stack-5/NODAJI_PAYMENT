@@ -21,6 +21,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final AccountService accountService;
+    private final HistoryService historyService;
     private final PaymentUtils paymentUtils;
 
 
@@ -39,7 +40,7 @@ public class PaymentServiceImpl implements PaymentService {
 //            예치금 충전
             accountService.depositPoint(userId,amount);
 //            충전 내역 저장
-            accountService.createDepositHistory(userId,amount);
+            historyService.createDepositHistory(userId,amount);
 //            결제 내역 저장
             createPaymentHistory(jsonObject, userId);
 

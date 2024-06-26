@@ -30,6 +30,9 @@ public class PaymentServiceImplTest {
     private AccountService accountService;
 
     @Mock
+    private HistoryService historyService;
+
+    @Mock
     private PaymentUtils paymentUtils;
 
     @InjectMocks
@@ -86,7 +89,7 @@ public class PaymentServiceImplTest {
         PaymentSuccessResponseDto response = (PaymentSuccessResponseDto) paymentService.processPayment("user1", "order1", 100L, "paymentKey");
 
         verify(accountService, times(1)).depositPoint("user1", 100L);
-        verify(accountService, times(1)).createDepositHistory("user1", 100L);
+        verify(historyService, times(1)).createDepositHistory("user1", 100L);
         verify(paymentUtils, times(1)).sendRequest("order1", 100L, mockConnection);
         assertNotNull(response);
     }

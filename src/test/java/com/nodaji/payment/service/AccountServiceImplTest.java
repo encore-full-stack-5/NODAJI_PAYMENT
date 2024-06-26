@@ -32,6 +32,9 @@ class AccountServiceImplTest {
     @Autowired
     AccountServiceImpl accountService;
 
+    @Autowired
+    HistoryServiceImpl historyService;
+
     @BeforeEach
     void setUp(){
         Account account = new Account("userId",10000L);
@@ -173,14 +176,14 @@ class AccountServiceImplTest {
     @DisplayName("예치금 거래내역 조회 테스트")
     void getTransactionHistory() throws ParseException {
         // given
-        accountService.createDepositHistory("userId1",20000L);
-        accountService.createWithdrawHistory("userId1",new WithdrawRequestDto(500L,500L,"신한","123456789"));
-        accountService.createBuyHistory("userId1",new BuyRequestDto("동행복권결제",10000L));
+        historyService.createDepositHistory("userId1",20000L);
+        historyService.createWithdrawHistory("userId1",new WithdrawRequestDto(500L,500L,"신한","123456789"));
+        historyService.createBuyHistory("userId1",new BuyRequestDto("동행복권결제",10000L));
         // when
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = dateFormat.parse("2023-01-01");
         Date endDate = dateFormat.parse("2100-12-31");
-        List<History> userId1 = accountService.getTransactionHistory("userId1",startDate,endDate);
+        List<History> userId1 = historyService.getTransactionHistory("userId1",startDate,endDate);
         // then
         assertEquals(userId1.get(0).getPrice(),10000L);
         assertEquals(userId1.get(1).getPrice(),1000L);
