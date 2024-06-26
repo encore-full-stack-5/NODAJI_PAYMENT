@@ -6,6 +6,7 @@ import com.nodaji.payment.dto.response.PaymentErrorResponseDto;
 import com.nodaji.payment.service.AccountService;
 import com.nodaji.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
+import org.json.simple.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +28,7 @@ public class PaymentController {
     };
     @PostMapping("/success/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public Object submitPayment(
+    public JSONObject submitPayment(
             @PathVariable(name = "userId") String userId,
             @RequestParam(name = "orderId") String orderId,
             @RequestParam(name = "amount") Long amount,
