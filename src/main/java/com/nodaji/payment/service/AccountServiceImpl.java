@@ -35,10 +35,10 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.existsById(userId);
     }
 
-    @KafkaListener(topics = "account-topic")
+//    @KafkaListener(topics = "user-topic")
     public void synchronization(KafkaStatus<KafkaAccountDto> status) {
         switch (status.status()) {
-            case "createAccount" -> {
+            case "update" -> {
                 System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                 createAccount(status.data());
             }
@@ -99,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
     public void deductPoint(String userId, BuyRequestDto req){
         Account account = accountRepository.findById(userId).orElseThrow(AccountNotFoundException::new);
         Long balanceResult = account.decreaseBalance(req.amount());
-        accountProducer.send(KafkaBalanceDto.from(balanceResult),"point");
+//        accountProducer.send(KafkaBalanceDto.from(balanceResult),"point");
     }
 
     /**
@@ -111,7 +111,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(userId)
                 .orElseThrow(AccountNotFoundException::new);
         Long balanceResult = account.increaseBalance(amount);
-        accountProducer.send(KafkaBalanceDto.from(balanceResult),"point");
+//        accountProducer.send(KafkaBalanceDto.from(balanceResult),"point");
     }
     /**
      * 예치금 충전(당첨)
@@ -123,7 +123,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(AccountNotFoundException::new);
         Long balanceResult = account.increaseBalance(req.amount());
         historyService.createWinDepositHistory(userId,req);
-        accountProducer.send(KafkaBalanceDto.from(balanceResult),"point");
+//        accountProducer.send(KafkaBalanceDto.from(balanceResult),"point");
     }
     /**
      * 예치금 출금

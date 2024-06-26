@@ -31,10 +31,10 @@ class AccountServiceImplTest {
     AccountRepository accountRepository;
 
     @Autowired
-    AccountServiceImpl accountService;
+    AccountServiceImpl accountServiceTest;
 
     @Autowired
-    HistoryServiceImpl historyService;
+    HistoryServiceImpl historyServiceTest;
 
     @BeforeEach
     void setUp(){
@@ -52,7 +52,7 @@ class AccountServiceImplTest {
     @Transactional
     void isExistAccount(){
         // when
-        Boolean existAccount = accountService.isExistAccount("userId");
+        Boolean existAccount = accountServiceTest.isExistAccount("userId");
         // then
         assertEquals(true,existAccount);
     }
@@ -73,7 +73,7 @@ class AccountServiceImplTest {
     @Transactional
     void createExistAccount() {
         // when
-        AccountExistException existException = assertThrows(AccountExistException.class,()->accountService.createAccount("userId"));
+        AccountExistException existException = assertThrows(AccountExistException.class,()->accountServiceTest.createAccount("userId"));
         // then
         assertEquals("해당 계좌가 이미 존재합니다.",existException.getMessage());
     }
@@ -85,7 +85,7 @@ class AccountServiceImplTest {
         // given
         accountRepository.saveAndFlush(new Account("userId1",0L));
 
-        accountService.deleteAccount("userId1");
+        accountServiceTest.deleteAccount("userId1");
         // when
         boolean existsById = accountRepository.existsById("userId1");
         // then
@@ -97,7 +97,7 @@ class AccountServiceImplTest {
     @Transactional
     void deleteAccountMoreThanZeroException() {
         // when
-        BalanceNotZeroException NotZeroException = assertThrows(BalanceNotZeroException.class,()->accountService.deleteAccount("userId"));
+        BalanceNotZeroException NotZeroException = assertThrows(BalanceNotZeroException.class,()->accountServiceTest.deleteAccount("userId"));
         // then
         assertEquals("예치금 잔액이 남아있습니다.",NotZeroException.getMessage());
     }
@@ -107,7 +107,7 @@ class AccountServiceImplTest {
     @Transactional
     void getPoint() {
         // when
-        PointResponseDto userId = accountService.getPoint("userId");
+        PointResponseDto userId = accountServiceTest.getPoint("userId");
         // then
         assertEquals(10000L,userId.point());
     }
@@ -120,7 +120,7 @@ class AccountServiceImplTest {
         // given
         accountRepository.deleteById("userId");
         // when
-        AccountNotFoundException accountNotFoundException = assertThrows(AccountNotFoundException.class,()->accountService.getPoint("userId"));
+        AccountNotFoundException accountNotFoundException = assertThrows(AccountNotFoundException.class,()->accountServiceTest.getPoint("userId"));
         // then
         assertEquals("해당 계좌가 없습니다.",accountNotFoundException.getMessage());
     }
@@ -130,8 +130,8 @@ class AccountServiceImplTest {
     @DisplayName("결제시 예치금 차감 테스트")
     void deductPoint(){
         // when
-        accountService.deductPoint("userId",new BuyRequestDto("결제", 1000L));
-        PointResponseDto userId = accountService.getPoint("userId");
+        accountServiceTest.deductPoint("userId",new BuyRequestDto("결제", 1000L));
+        PointResponseDto userId = accountServiceTest.getPoint("userId");
         // then
         assertEquals(9000L,userId.point());
     }
@@ -140,7 +140,7 @@ class AccountServiceImplTest {
     @DisplayName("결제시 결제금액이 예치금보다 클 때 예외 테스트")
     void deductPointMoreThanDeposit(){
         // when
-        BalanceNotEnoughException balanceNotEnoughException = assertThrows(BalanceNotEnoughException.class,()->accountService.deductPoint("userId",new BuyRequestDto("결제", 100000L)));
+        BalanceNotEnoughException balanceNotEnoughException = assertThrows(BalanceNotEnoughException.class,()->accountServiceTest.deductPoint("userId",new BuyRequestDto("결제", 100000L)));
         // then
         assertEquals("예치금 잔액이 부족합니다.",balanceNotEnoughException.getMessage());
     }
@@ -150,8 +150,8 @@ class AccountServiceImplTest {
     @DisplayName("예치금 충전 테스트")
     void depositPoint() {
         // when
-        accountService.depositPoint("userId",10000L);
-        PointResponseDto userId = accountService.getPoint("userId");
+        accountServiceTest.depositPoint("userId",10000L);
+        PointResponseDto userId = accountServiceTest.getPoint("userId");
         // then
         assertEquals(20000L,userId.point());
     }
@@ -160,9 +160,9 @@ class AccountServiceImplTest {
     @DisplayName("예치금 출금 테스트")
     void withdrawPoint() {
         // given
-        accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5000L,"신한","123456789"));
+        accountServiceTest.withdrawPoint("userId",new WithdrawRequestDto(5000L,5000L,"신한","123456789"));
         // when
-        PointResponseDto userId = accountService.getPoint("userId");
+        PointResponseDto userId = accountServiceTest.getPoint("userId");
         // then
         assertEquals(0L,userId.point());
     }
@@ -171,7 +171,7 @@ class AccountServiceImplTest {
     @DisplayName("예치금 출금 예외 테스트(출금 금액이 예치금 + 수수료 보다 많을때")
     void withdrawPointMoreThanDeposit() {
         // when
-        ExceedsBalanceException exceedsBalanceException = assertThrows(ExceedsBalanceException.class,()->accountService.withdrawPoint("userId",new WithdrawRequestDto(5000L,5001L,"신한","123456789")));
+        ExceedsBalanceException exceedsBalanceException = assertThrows(ExceedsBalanceException.class,()->accountServiceTest.withdrawPoint("userId",new WithdrawRequestDto(5000L,5001L,"신한","123456789")));
         // then
         assertEquals("출금하려는 금액이 예치금과 수수료의 합보다 많습니다.",exceedsBalanceException.getMessage());
     }
@@ -182,14 +182,14 @@ class AccountServiceImplTest {
     @DisplayName("예치금 거래내역 조회 테스트")
     void getTransactionHistory() throws ParseException {
         // given
-        historyService.createDepositHistory("userId1",20000L);
-        historyService.createWithdrawHistory("userId1",new WithdrawRequestDto(500L,500L,"신한","123456789"));
-        historyService.createBuyHistory("userId1",new BuyRequestDto("동행복권결제",10000L));
+        historyServiceTest.createDepositHistory("userId1",20000L);
+        historyServiceTest.createWithdrawHistory("userId1",new WithdrawRequestDto(500L,500L,"신한","123456789"));
+        historyServiceTest.createBuyHistory("userId1",new BuyRequestDto("동행복권결제",10000L));
         // when
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date startDate = dateFormat.parse("2023-01-01");
         Date endDate = dateFormat.parse("2100-12-31");
-        List<History> userId1 = historyService.getTransactionHistory("userId1",startDate,endDate);
+        List<History> userId1 = historyServiceTest.getTransactionHistory("userId1",startDate,endDate);
         // then
         assertEquals(userId1.get(0).getPrice(),10000L);
         assertEquals(userId1.get(1).getPrice(),1000L);

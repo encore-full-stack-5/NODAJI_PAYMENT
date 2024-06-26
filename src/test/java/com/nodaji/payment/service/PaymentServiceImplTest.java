@@ -30,7 +30,7 @@ public class PaymentServiceImplTest {
     private AccountService accountService;
 
     @Mock
-    private HistoryService historyService;
+    private HistoryServiceImpl historyService;
 
     @Mock
     private PaymentUtils paymentUtils;
@@ -86,7 +86,7 @@ public class PaymentServiceImplTest {
         when(mockConnection.getResponseCode()).thenReturn(200);
         when(paymentUtils.getResponseJsonObject(any(), anyBoolean())).thenReturn(jsonObject);
 
-        PaymentSuccessResponseDto response = (PaymentSuccessResponseDto) paymentService.processPayment("user1", "order1", 100L, "paymentKey");
+        JSONObject response = paymentService.processPayment("user1", "order1", 100L, "paymentKey");
 
         verify(accountService, times(1)).depositPoint("user1", 100L);
         verify(historyService, times(1)).createDepositHistory("user1", 100L);
