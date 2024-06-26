@@ -1,4 +1,4 @@
-package com.nodaji.payment.global.concurrency.utils;
+package com.nodaji.payment.utils;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

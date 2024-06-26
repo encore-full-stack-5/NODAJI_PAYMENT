@@ -1,4 +1,4 @@
-package com.nodaji.payment.global.concurrency.config;
+package com.nodaji.payment.global.config;
 
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
