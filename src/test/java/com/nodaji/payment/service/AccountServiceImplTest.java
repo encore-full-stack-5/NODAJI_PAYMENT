@@ -7,6 +7,7 @@ import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.global.domain.exception.*;
 import com.nodaji.payment.global.domain.repository.AccountRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,11 @@ class AccountServiceImplTest {
     void setUp(){
         Account account = new Account("userId",10000L);
         accountRepository.save(account);
+    }
+
+    @AfterEach
+    void end(){
+        accountRepository.deleteById("userId");
     }
 
     @Test
@@ -77,7 +83,8 @@ class AccountServiceImplTest {
     @Transactional
     void deleteAccount() {
         // given
-        accountService.createAccount("userId1");
+        accountRepository.saveAndFlush(new Account("userId1",0L));
+
         accountService.deleteAccount("userId1");
         // when
         boolean existsById = accountRepository.existsById("userId1");
@@ -130,7 +137,6 @@ class AccountServiceImplTest {
     }
 
     @Test
-    @Transactional
     @DisplayName("결제시 결제금액이 예치금보다 클 때 예외 테스트")
     void deductPointMoreThanDeposit(){
         // when

@@ -1,7 +1,7 @@
-package com.nodaji.payment.global.concurrency.aop;
+package com.nodaji.payment.aop;
 
-import com.nodaji.payment.global.concurrency.utils.CustomSpringELParser;
-import com.nodaji.payment.global.concurrency.utils.DistributedLock;
+import com.nodaji.payment.utils.CustomSpringELParser;
+import com.nodaji.payment.utils.DistributedLock;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,7 +22,7 @@ public class DistributedLockAop {
     private final RedissonClient redissonClient;
     private final AopForTransaction aopForTransaction;
 
-    @Around("@annotation(com.nodaji.payment.global.concurrency.utils.DistributedLock)")
+    @Around("@annotation(com.nodaji.payment.utils.DistributedLock)")
     public Object lock(final ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
 
