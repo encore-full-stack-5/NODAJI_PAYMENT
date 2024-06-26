@@ -31,12 +31,13 @@ public class Account {
         else point = point-(price+charge);
     }
 
-    public void increaseBalance(Long amount) {
-        point = point+amount;
+    public Long increaseBalance(Long amount) {
+        return point = point+amount;
     }
 
-    public void decreaseBalance(Long amount) {
+    public Long decreaseBalance(Long amount) {
         if(amount > point) throw new BalanceNotEnoughException();
-        point = point-amount;
+        return point = point-amount;
+
     }
 }

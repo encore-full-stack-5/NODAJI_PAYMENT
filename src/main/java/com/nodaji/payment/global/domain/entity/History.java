@@ -29,7 +29,7 @@ public class History {
     private String withdrawAccountNum;
     
 
-    public History toEntity(String userId, Long price){
+    public static History toEntity(String userId, Long price){
         return History.builder()
                 .transactionStatus("입금")
                 .price(price)
