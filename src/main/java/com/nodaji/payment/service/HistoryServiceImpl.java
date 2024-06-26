@@ -6,6 +6,7 @@ import com.nodaji.payment.global.domain.dto.WinDepositDto;
 import com.nodaji.payment.global.domain.entity.History;
 import com.nodaji.payment.global.domain.repository.HistoryRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -19,6 +20,7 @@ public class HistoryServiceImpl implements HistoryService{
      * 입금 거래내역 추가
      */
     @Override
+    @Async
     public void createDepositHistory(String userId, Long price) {
         historyRepository.save(History.toEntity(userId, price));
     }
@@ -26,6 +28,7 @@ public class HistoryServiceImpl implements HistoryService{
      * 당첨금 입금내역 추가
      */
     @Override
+    @Async
     public void createWinDepositHistory(String userId, WinDepositDto req) {
         historyRepository.save(req.toEntity(userId, req));
     }
@@ -33,6 +36,7 @@ public class HistoryServiceImpl implements HistoryService{
      * 출금 거래내역 추가
      */
     @Override
+    @Async
     public void createWithdrawHistory(String userId, WithdrawRequestDto req) {
         historyRepository.save(req.toEntity(userId, req));
     }
@@ -41,6 +45,7 @@ public class HistoryServiceImpl implements HistoryService{
      * 결제 거래내역 추가
      */
     @Override
+    @Async
     public void createBuyHistory(String userId, BuyRequestDto req) {
         historyRepository.save(BuyRequestDto.toEntity(userId, req));
     }
