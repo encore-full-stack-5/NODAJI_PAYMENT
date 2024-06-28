@@ -46,7 +46,7 @@ public class PaymentHistory {
                 .approvedAt(jsonObject.get("approvedAt").toString())
                 .totalAmount(jsonObject.get("totalAmount").toString())
                 .status(jsonObject.get("status").toString())
-                .status(jsonObject.get("orderName").toString())
+                .orderName(jsonObject.get("orderName").toString())
                 .build();
 
     }

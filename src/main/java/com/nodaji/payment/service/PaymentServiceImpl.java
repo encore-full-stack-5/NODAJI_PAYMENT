@@ -21,12 +21,13 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final PaymentHistoryRepository paymentHistoryRepository;
     private final AccountService accountService;
+    private final HistoryService historyService;
     private final PaymentUtils paymentUtils;
 
 
     @Transactional
-    public Object processPayment(String userId, String orderId, Long amount, String paymentKey) throws Exception {
-//        게좌가 존재하는지 검증
+    public JSONObject processPayment(String userId, String orderId, Long amount, String paymentKey) throws Exception {
+//        계좌가 존재하는지 검증
         if(!accountService.isExistAccount(userId)) throw new AccountNotFoundException();
 
         String authorizations = paymentUtils.getAuthorizations();
@@ -39,13 +40,12 @@ public class PaymentServiceImpl implements PaymentService {
 //            예치금 충전
             accountService.depositPoint(userId,amount);
 //            충전 내역 저장
-            accountService.createDepositHistory(userId,amount);
+            historyService.createDepositHistory(userId,amount);
 //            결제 내역 저장
             createPaymentHistory(jsonObject, userId);
-
-            return PaymentSuccessResponseDto.fromJSONObject(jsonObject);
+            return jsonObject;
         } else {
-            return PaymentErrorResponseDto.fromJSONObject(jsonObject);
+            return jsonObject;
         }
     }
 

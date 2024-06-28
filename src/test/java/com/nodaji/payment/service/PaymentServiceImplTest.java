@@ -1,10 +1,8 @@
 package com.nodaji.payment.service;
 
 import com.nodaji.payment.dto.response.PaymentSuccessResponseDto;
-import com.nodaji.payment.global.domain.entity.Account;
 import com.nodaji.payment.global.domain.entity.PaymentHistory;
 import com.nodaji.payment.global.domain.exception.AccountNotFoundException;
-import com.nodaji.payment.global.domain.repository.AccountRepository;
 import com.nodaji.payment.global.domain.repository.PaymentHistoryRepository;
 import com.nodaji.payment.utils.PaymentUtils;
 import org.json.simple.JSONObject;
@@ -14,17 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -40,10 +30,13 @@ public class PaymentServiceImplTest {
     private AccountService accountService;
 
     @Mock
+    private HistoryService historyService;
+
+    @Mock
     private PaymentUtils paymentUtils;
 
     @InjectMocks
-    private PaymentServiceImpl paymentService;
+    private PaymentServiceImpl paymentServiceImpl;
 
     private JSONObject jsonObject;
     private String userId;
@@ -66,7 +59,7 @@ public class PaymentServiceImplTest {
     @Transactional
     public void createPaymentHistoryTest(){
         PaymentHistory paymentHistory = new PaymentHistory().toEntity(jsonObject, userId);
-        paymentService.createPaymentHistory(jsonObject, userId);
+        paymentServiceImpl.createPaymentHistory(jsonObject, userId);
         verify(paymentHistoryRepository, times(1)).save(any(PaymentHistory.class));
     }
 
@@ -78,7 +71,7 @@ public class PaymentServiceImplTest {
         when(accountService.isExistAccount(anyString())).thenReturn(false);
 
         assertThrows(AccountNotFoundException.class, () -> {
-            paymentService.processPayment("user1", "order1", 100L, "paymentKey");
+            paymentServiceImpl.processPayment("user1", "order1", 100L, "paymentKey");
         });
     }
 
@@ -93,10 +86,10 @@ public class PaymentServiceImplTest {
         when(mockConnection.getResponseCode()).thenReturn(200);
         when(paymentUtils.getResponseJsonObject(any(), anyBoolean())).thenReturn(jsonObject);
 
-        PaymentSuccessResponseDto response = (PaymentSuccessResponseDto) paymentService.processPayment("user1", "order1", 100L, "paymentKey");
+        JSONObject response = paymentServiceImpl.processPayment("user1", "order1", 100L, "paymentKey");
 
         verify(accountService, times(1)).depositPoint("user1", 100L);
-        verify(accountService, times(1)).createDepositHistory("user1", 100L);
+        verify(historyService, times(1)).createDepositHistory("user1", 100L);
         verify(paymentUtils, times(1)).sendRequest("order1", 100L, mockConnection);
         assertNotNull(response);
     }

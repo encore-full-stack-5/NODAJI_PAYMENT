@@ -1,5 +1,7 @@
 package com.nodaji.payment.global.domain.entity;
 
+import com.nodaji.payment.global.domain.exception.BalanceNotEnoughException;
+import com.nodaji.payment.global.domain.exception.ExceedsBalanceException;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -14,7 +16,6 @@ public class Account {
     @Column(name = "USER_ID")
     private String userId;
     @Column(name = "POINT")
-    @Setter
     private Long point;
 
     public Account toEntity(String userId,Long point){
@@ -22,6 +23,21 @@ public class Account {
                 .userId(userId)
                 .point(point)
                 .build();
+
+    }
+
+    public void decreaseBalanceWithCharge(Long price, Long charge) {
+        if(point<price+charge) throw new ExceedsBalanceException();
+        else point = point-(price+charge);
+    }
+
+    public Long increaseBalance(Long amount) {
+        return point = point+amount;
+    }
+
+    public Long decreaseBalance(Long amount) {
+        if(amount > point) throw new BalanceNotEnoughException();
+        return point = point-amount;
 
     }
 }
