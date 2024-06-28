@@ -29,8 +29,8 @@ public class HistoryServiceImpl implements HistoryService{
      */
     @Override
     @Async
-    public void createWinDepositHistory(String userId, WinDepositDto req) {
-        historyRepository.save(req.toEntity(userId, req));
+    public void createWinDepositHistory(WinDepositDto req) {
+        historyRepository.save(req.toEntity(req));
     }
     /**
      * 출금 거래내역 추가

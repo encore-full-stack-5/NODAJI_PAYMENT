@@ -20,7 +20,7 @@ public interface AccountService {
     PointResponseDto getPoint(String userId);
 
     void depositPoint(String userId, Long req);
-    void depositWinPoint(String userId,WinDepositDto req);
+    void depositWinPoint(WinDepositDto req);
     void deductPoint(String userId, BuyRequestDto req);
     void withdrawPoint(String userId, WithdrawRequestDto req);
 
