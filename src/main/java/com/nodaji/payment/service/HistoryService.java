@@ -14,6 +14,6 @@ public interface HistoryService {
     void createWithdrawHistory(String userId, WithdrawRequestDto req);
 
     void createDepositHistory(String userId, Long price);
-    void createWinDepositHistory(String userId, WinDepositDto req);
+    void createWinDepositHistory(WinDepositDto req);
     void createBuyHistory(String userId, BuyRequestDto req);
 }

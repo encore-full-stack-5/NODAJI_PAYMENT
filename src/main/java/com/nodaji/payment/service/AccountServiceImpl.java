@@ -120,12 +120,12 @@ public class AccountServiceImpl implements AccountService {
      */
     @Override
     @Transactional
-    public void depositWinPoint(String userId,WinDepositDto req) {
-        Account account = accountRepository.findById(userId)
+    public void depositWinPoint(WinDepositDto req) {
+        Account account = accountRepository.findById(req.userId())
                 .orElseThrow(AccountNotFoundException::new);
         Long balanceResult = account.increaseBalance(req.amount());
-        historyService.createWinDepositHistory(userId,req);
-        accountProducer.send(KafkaBalanceDto.from(balanceResult,userId),"updatePoint");
+        historyService.createWinDepositHistory(req);
+        accountProducer.send(KafkaBalanceDto.from(balanceResult,req.userId()),"updatePoint");
     }
     /**
      * 예치금 출금
@@ -138,6 +138,7 @@ public class AccountServiceImpl implements AccountService {
         account.decreaseBalanceWithCharge(req.price(),req.charge());
 //        거래내역에 추가
         historyService.createWithdrawHistory(userId, req);
+
     }
 
 
