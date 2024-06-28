@@ -30,13 +30,13 @@ public class PaymentServiceImplTest {
     private AccountService accountService;
 
     @Mock
-    private HistoryServiceImpl historyService;
+    private HistoryService historyService;
 
     @Mock
     private PaymentUtils paymentUtils;
 
     @InjectMocks
-    private PaymentServiceImpl paymentService;
+    private PaymentServiceImpl paymentServiceImpl;
 
     private JSONObject jsonObject;
     private String userId;
@@ -59,7 +59,7 @@ public class PaymentServiceImplTest {
     @Transactional
     public void createPaymentHistoryTest(){
         PaymentHistory paymentHistory = new PaymentHistory().toEntity(jsonObject, userId);
-        paymentService.createPaymentHistory(jsonObject, userId);
+        paymentServiceImpl.createPaymentHistory(jsonObject, userId);
         verify(paymentHistoryRepository, times(1)).save(any(PaymentHistory.class));
     }
 
@@ -71,7 +71,7 @@ public class PaymentServiceImplTest {
         when(accountService.isExistAccount(anyString())).thenReturn(false);
 
         assertThrows(AccountNotFoundException.class, () -> {
-            paymentService.processPayment("user1", "order1", 100L, "paymentKey");
+            paymentServiceImpl.processPayment("user1", "order1", 100L, "paymentKey");
         });
     }
 
@@ -86,7 +86,7 @@ public class PaymentServiceImplTest {
         when(mockConnection.getResponseCode()).thenReturn(200);
         when(paymentUtils.getResponseJsonObject(any(), anyBoolean())).thenReturn(jsonObject);
 
-        JSONObject response = paymentService.processPayment("user1", "order1", 100L, "paymentKey");
+        JSONObject response = paymentServiceImpl.processPayment("user1", "order1", 100L, "paymentKey");
 
         verify(accountService, times(1)).depositPoint("user1", 100L);
         verify(historyService, times(1)).createDepositHistory("user1", 100L);
