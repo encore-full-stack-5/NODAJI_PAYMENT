@@ -24,8 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Slf4j
 public class AccountServiceImpl implements AccountService {
-    private final AccountRepository accountRepository;
     private final AccountProducer accountProducer;
+    private final AccountRepository accountRepository;
     private final HistoryService historyService;
 
     /**
@@ -113,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.findById(userId)
                 .orElseThrow(AccountNotFoundException::new);
         Long balanceResult = account.increaseBalance(amount);
-        accountProducer.send(KafkaBalanceDto.from(balanceResult,userId),"updatePoint");
+//        accountProducer.send(KafkaBalanceDto.from(balanceResult,userId),"updatePoint");
     }
     /**
      * 예치금 충전(당첨)
@@ -125,7 +125,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(AccountNotFoundException::new);
         Long balanceResult = account.increaseBalance(req.amount());
         historyService.createWinDepositHistory(req);
-        accountProducer.send(KafkaBalanceDto.from(balanceResult,req.userId()),"updatePoint");
+//        accountProducer.send(KafkaBalanceDto.from(balanceResult,req.userId()),"updatePoint");
     }
     /**
      * 예치금 출금
