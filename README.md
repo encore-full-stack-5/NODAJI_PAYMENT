@@ -24,11 +24,26 @@
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ![Notion](https://img.shields.io/badge/notion-white.svg?style=for-the-badge&logo=notion&logoColor=000000)
 
+## 🕸 ERD
+![image](https://github.com/hyun1999/html-study/assets/74495717/36052596-b6fa-4de3-89d1-d8d0eff1cc9d)
+
+## 📄 UML
+
+### 결제 시퀀스 다이어그램
+![결제 drawio](https://github.com/hyun1999/html-study/assets/74495717/c9bc3446-55db-434f-9600-3bd5cefd0236)
+
+### 당첨금 지급 시퀀스 다이어그램
+![feign drawio](https://github.com/hyun1999/html-study/assets/74495717/05f39d8a-6c17-4ce0-b171-20b696145570)
+
+## 
+
 ## 🖥️ 화면 구성도
 
 ### 결제 페이지
 ![토스결제](https://github.com/hyun1999/html-study/assets/74495717/21e6fa01-8af4-4c39-87bc-05d5344f6762)
+### 출금 페이지
 ![출금](https://github.com/hyun1999/html-study/assets/74495717/d109bdf5-3e06-43db-a680-7007f5587f59)
+### 입출금 내역 페이지
 ![입출금내역](https://github.com/hyun1999/html-study/assets/74495717/f5d0d44b-16d2-4bf6-b177-20709aa62fd4)
 
 
