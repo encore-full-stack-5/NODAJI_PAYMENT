@@ -28,7 +28,7 @@
 ![image](https://github.com/hyun1999/html-study/assets/74495717/36052596-b6fa-4de3-89d1-d8d0eff1cc9d)
 
 ## 아키텍처
-![nodaji아키텍처](https://github.com/hyun1999/ci-backend/assets/74495717/b4411619-4944-4146-b7c6-97011d8a2ed3)
+![payment아키](https://github.com/hyun1999/ci-backend/assets/74495717/a5af4bfe-73bd-40fe-a436-a7abdd535b3a)
 
 ## 📄 UML
 
