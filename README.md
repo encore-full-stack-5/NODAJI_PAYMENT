@@ -6,6 +6,9 @@
 ### Win Result Server
 https://github.com/encore-full-stack-5/NODAJI_WIN_RESULT
 
+### Front-End
+https://github.com/encore-full-stack-5/DH_lottery
+
 ## ⚙️ 기술스택
 
 ### Server Framework
@@ -41,7 +44,6 @@ https://github.com/encore-full-stack-5/NODAJI_WIN_RESULT
 ### 당첨금 지급 시퀀스 다이어그램
 ![feign drawio](https://github.com/hyun1999/html-study/assets/74495717/05f39d8a-6c17-4ce0-b171-20b696145570)
 
-## 
 
 ## 🖥️ 화면 구성도
 
