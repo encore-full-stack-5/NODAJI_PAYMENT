@@ -30,6 +30,81 @@ https://github.com/encore-full-stack-5/DH_lottery
 ![Slack](https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=slack&logoColor=white)
 ![Notion](https://img.shields.io/badge/notion-white.svg?style=for-the-badge&logo=notion&logoColor=000000)
 
+## 프로젝트 구조
+📦main<br>
+ ┣ 📂generated<br>
+ ┣ 📂java<br>
+ ┃ ┗ 📂com<br>
+ ┃ ┃ ┗ 📂nodaji<br>
+ ┃ ┃ ┃ ┗ 📂payment<br>
+ ┃ ┃ ┃ ┃ ┣ 📂aop<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜AopForTransaction.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜DistributedLockAop.java<br>
+ ┃ ┃ ┃ ┃ ┣ 📂controller<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountController.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜ExceptionController.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜PaymentController.java<br>
+ ┃ ┃ ┃ ┃ ┣ 📂dto<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂request<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BuyRequestDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜DepositRequestDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WithdrawRequestDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂response<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BuyResponseDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PaymentErrorResponseDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜PaymentSuccessResponseDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PointResponseDto.java<br>
+ ┃ ┃ ┃ ┃ ┣ 📂global<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂config<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜CustomSecurityConfig.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜RedissonConfig.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📂domain<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂dto<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜KafkaAccountDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜KafkaBalanceDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜UserDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜WinDepositDto.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂entity<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜Account.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜History.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PaymentHistory.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📂exception<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountExistException.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountNotFoundException.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BalanceNotEnoughException.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜BalanceNotZeroException.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜ExceedsBalanceException.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜UserNotFoundException.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📂repository<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountRepository.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜HistoryRepository.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜PaymentHistoryRepository.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┗ 📂kafka<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountProducer.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ 📜KafkaStatus.java<br>
+ ┃ ┃ ┃ ┃ ┣ 📂service<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountService.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜AccountServiceImpl.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜HistoryService.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜HistoryServiceImpl.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜PaymentService.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜PaymentServiceImpl.java<br>
+ ┃ ┃ ┃ ┃ ┣ 📂utils<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜CustomSpringELParser.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜DistributedLock.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜JwtAuthenticationFilter.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┣ 📜JwtUtil.java<br>
+ ┃ ┃ ┃ ┃ ┃ ┗ 📜PaymentUtils.java<br>
+ ┃ ┃ ┃ ┃ ┗ 📜PaymentApplication.java<br>
+ ┗ 📂resources<br>
+ ┃ ┣ 📂static<br>
+ ┃ ┣ 📂templates<br>
+ ┃ ┣ 📜application-dev.yml<br>
+ ┃ ┣ 📜application-local.yml<br>
+ ┃ ┣ 📜application-test.yml<br>
+ ┃ ┗ 📜application.yml<br>
+
+
 ## 🕸 ERD
 ![image](https://github.com/hyun1999/html-study/assets/74495717/36052596-b6fa-4de3-89d1-d8d0eff1cc9d)
 
